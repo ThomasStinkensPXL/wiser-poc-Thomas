@@ -16,6 +16,7 @@ import MultipleChoiceQuestionComponent from '@/components/MultipleChoiceQuestion
 import SingleChoiceQuestionComponent from '@/components/SingleChoiceQuestionComponent.vue'
 import ScoreQuestionComponent from '@/components/ScoreQuestionComponent.vue'
 import { z, ZodObject, type ZodTypeAny } from 'zod'
+import { an } from 'vitest/dist/reporters-MmQN-57K'
 
 const user1 = '00000000-0000-0000-0000-000000000001'
 
@@ -106,7 +107,7 @@ const question5: ScoreQuestion = {
   questionHint: 'Wow!',
   questionText: "Dit is de vijfde vraag",
   index: 5,
-  optional: false,
+  optional: true,
   maxScore: 13,
   minScore: -3,
   id: '00000000-0000-0000-0000-000000000009',
@@ -208,18 +209,16 @@ function addScoreQuestionValidation(zodObject: ZodObject<any>, question: ScoreQu
   return zodObject.merge(validationSchema)
 }
 
+type ValidationSchema =
+  z.ZodString
+  | z.ZodNumber
+  | z.ZodBranded<z.ZodString, 'ChoiceUuid'>
+  | z.ZodArray<z.ZodBranded<z.ZodString, 'ChoiceUuid'>>
 
+type QuestionsAnswerValidationForm = ZodObject<Record<string, z.ZodNullable<ValidationSchema> | ValidationSchema>>
 
-// Liefst zou ik algemene types maken voor alles wat er in zodobject kan zitten en daar dan gewoon aan toegoeven in add methodes.
-// bv. (bij addScoreQuestionValidation)
-// scoreQuestionAnswer                   -> Dit!!!
-//    .min(question.minScore)
-//    .max(question.maxScore)
-// Op deze manier kan ik dan gwn een zod.union ofzo maken van wat er in de form mag zitten.
-// Probleem! De naamgeving is beetje confusing omdat we al die shit hebben.
-// Vraag: kan ik de bestaande verwijderen? -> we gebruiken ze niet echt om shit te valideren maar eerder om het type te kunnen gebruiken in questions.
 // Vervolgvraag: moeten we zelfs answer met een speciale type hebben in elke vraag?
-let formSchema: ZodObject<Record<string, z.ZodNullable<z.ZodString | z.ZodNumber |  z.ZodBranded<z.ZodString, 'ChoiceUuid'> | z.ZodArray<z.ZodBranded<z.ZodString, 'ChoiceUuid'>>> | z.ZodString | z.ZodNumber | z.ZodBranded<z.ZodString, 'ChoiceUuid'> | z.ZodArray<z.ZodBranded<z.ZodString, 'ChoiceUuid'>>>> = z.object({})
+let formSchema: QuestionsAnswerValidationForm = z.object({})
 for (let question of form1.questions) {
   switch (question.questionType) {
     case QuestionType.open:
@@ -243,15 +242,31 @@ const { form, onSubmitForm } = useForm({
   schema: formSchema
 })
 
-console.log(formSchema.shape[question2.id])
+// Uitzoeken welt type die formData is!
+function convertFormDataToAnswerDtos(formData: any): AnswerDto[] {
+  const answers: AnswerDto[] = []
+  for (let key in formData) {
+    answers.push({
+      questionId: key,
+      answer: formData[key]
+    })
+  }
+  return answers
+}
+
+class AnswerDto {
+  questionId: string
+  answer: string | number | string[]
+}
 
 onSubmitForm(async (data) => {
   console.log("Submitted!")
+  console.log(convertFormDataToAnswerDtos(data))
 })
 
 function saveAnswersAndExit() {
   console.log("Saved!")
-
+  console.log(convertFormDataToAnswerDtos(form.state))
   // Iets van router om te rerouten/exiten.
 }
 
