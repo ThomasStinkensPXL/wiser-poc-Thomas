@@ -21,7 +21,7 @@ const scoreRange = computed(() => {
   return scoreOptions;
 });
 
-const errorShown = computed(() => props.questionField.errors && props.questionField.errors._errors.length > 0 && props.questionField.isTouched && props.questionField.modelValue != null ) // We kijken na of het niet null is omdat het terug naar null gaat mochten we deselecten (na deselect is touched true! dus we doen nog een extra check!) ----> Dit kan wel misschien een probleem vormen met het valideren van required.
+const errorShown = computed(() => props.questionField.errors && props.questionField.errors._errors.length > 0 && props.questionField.isTouched && props.questionField.modelValue != null )
 </script>
 
 <template>
