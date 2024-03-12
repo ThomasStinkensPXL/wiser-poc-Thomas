@@ -10,7 +10,7 @@ export const questionSchema = z.object({
   questionType: z.string().min(4),
   optional: z.boolean(),
   questionText: z.string(),
-  questionHint: z.string(),
+  questionHint: z.string().optional(),
   answer: answerBaseSchema.optional()
 })
 

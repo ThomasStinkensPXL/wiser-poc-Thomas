@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   formango:
-    specifier: ^2.0.11
-    version: 2.0.11(vue@3.4.21)(zod@3.22.4)
+    specifier: ^2.0.12
+    version: 2.0.12(vue@3.4.21)(zod@3.22.4)
   pinia:
     specifier: ^2.1.7
     version: 2.1.7(typescript@5.3.3)(vue@3.4.21)
@@ -1556,8 +1556,8 @@ packages:
       mime-types: 2.1.35
     dev: true
 
-  /formango@2.0.11(vue@3.4.21)(zod@3.22.4):
-    resolution: {integrity: sha512-J1k1dIAsBxVnHzQ1BL7jrFHJmokUenGKJuPOt/TvIZVpAVNejxsZW4WPwyDwJ5YCeoNOBfZU0Wsm9aVO0H67Rg==}
+  /formango@2.0.12(vue@3.4.21)(zod@3.22.4):
+    resolution: {integrity: sha512-oXvKrqVRULy8tqQbVw4ykBAnLY1+jJjWepSYkdZLvFDpKtluAqW6RTjOKISidYoN49WLFtLiWcBwywUF8yAx4w==}
     peerDependencies:
       vue: ^3.2.47
       zod: ^3.21.4
